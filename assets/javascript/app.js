@@ -14,6 +14,15 @@ $("#add-train-button").on("click", function(event) {
     event.preventDefault();
     trainName = $("#train-name").val().trim();
     trainDestination = $("#train-destination").val().trim();
-    trainTime = $("train-time").val().trim();
-    trainFrequency = $("train-frequency").val().trim();
+    trainTime = $("#train-time").val().trim();
+    trainFrequency = $("#train-frequency").val().trim();
+
+    database.ref().push({
+        trainName: trainName,
+        trainDestination: trainDestination,
+        trainTime: trainTime,
+        trainFrequency: trainFrequency
+    });
+
+    console.log(trainName, trainDestination, trainTime, trainFrequency);
 });

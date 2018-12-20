@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Train Scheduler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron bg-dark text-light">
+            <h1>Schedule a train!</h1>
+        </div>
+        <div class="row">
+            <div class="col">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-dark">Current Train Schedule</li>
+                    <li class="list-group-item">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Train Name</th>
+                                    <th scope="col">Destination</th>
+                                    <th scope="col">Frequency (min)</th>
+                                    <th scope="col">Next Arrival</th>
+                                    <th scope="col">Minutes Away</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Trains go here -->
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-dark">Add Train</li>
+                    <li class="list-group-item">
+                        <form>
+                            <div class="form-group">
+                                <label for="train-name">Train Name</label>
+                                <input type="text" class="form-control" id="train-name" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="train-destination">Destination</label>
+                                <input type="text" class="form-control" id="train-destination" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="train-time">First Train Time (HH:mm - military time)</label>
+                                <input type="text" class="form-control" id="train-time" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="train-frequency">Frequency (min)</label>
+                                <input type="number" class="form-control" id="train-frequency" required/>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Submit</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

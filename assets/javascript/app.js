@@ -29,7 +29,7 @@ $("#add-train-button").on("click", function(event) {
 
 database.ref().on("child_added", function(snapshot) {
     var sv = snapshot.val();
-    
+    var currentTime = moment();
     var newRow = $("<tr>")
 
     var nameTD = $("<td>").text(sv.trainName);

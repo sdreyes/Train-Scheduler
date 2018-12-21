@@ -41,7 +41,7 @@ database.ref().on("child_added", function(snapshot) {
     var minutesTilTrain = sv.trainFrequency - timePassed;
     var nextTrain = moment().add(minutesTilTrain, "minutes");
 
-    var nextArrivalTD = $("<td>").text(nextTrain);
+    var nextArrivalTD = $("<td>").text(moment(nextTrain).format("LT"));
     var minutesAwayTD = $("<td>").text(minutesTilTrain);
     newRow.append(nameTD, destinationTD, frequencyTD, nextArrivalTD, minutesAwayTD);
     $("tbody").append(newRow);

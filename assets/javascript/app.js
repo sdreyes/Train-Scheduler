@@ -29,13 +29,22 @@ $("#add-train-button").on("click", function(event) {
 
 database.ref().on("child_added", function(snapshot) {
     var sv = snapshot.val();
-    var currentTime = moment();
     var newRow = $("<tr>")
 
     var nameTD = $("<td>").text(sv.trainName);
     var destinationTD = $("<td>").text(sv.trainDestination);
     var frequencyTD = $("<td>").text(sv.trainFrequency);
-    var nextArrivalTD = $("<td>");
+
+    var firstTrainTimeConverted = moment(sv.trainTime, "HH:mm").subtract(1, "years");
+    var diffTime = moment().diff(moment(firstTrainTimeConverted), "minutes");
+    var timePassed = diffTime % sv.trainFrequency;
+    var minutesTilTrain = sv.trainFrequency - timePassed;
+    var nextTrain = moment().add(minutesTilTrain, "minutes");
+
+    var nextArrivalTD = $("<td>").text(nextTrain);
+    var minutesAwayTD = $("<td>").text(minutesTilTrain);
+    newRow.append(nameTD, destinationTD, frequencyTD, nextArrivalTD, minutesAwayTD);
+    $("tbody").append(newRow);
 
 }, function(errorObject) {
     console.log("Errors handled: " + errorObject.code);

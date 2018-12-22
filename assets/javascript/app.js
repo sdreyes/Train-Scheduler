@@ -9,26 +9,19 @@ var config = {
 };
 
 firebase.initializeApp(config);
-
 var database = firebase.database();
+
+// Regular expression for military time
 var timeFormat = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
 $("#add-train-button").on("click", function(event) {
     event.preventDefault();
 
-    // $("#train-name").required = true;
-    // $("#train-destination").required = true;
-    // $("#train-time").required = true;
-    // $("#train-frequency").required = true;
-
-    $("#train-name").attr("required", true);
-
+    // Capture the values in the input fields
     trainName = $("#train-name").val().trim();
     trainDestination = $("#train-destination").val().trim();
     trainTime = $("#train-time").val().trim();
     trainFrequency = $("#train-frequency").val().trim();
-
-    
 
     // Perform form validation before accepting values
     if ($("#train-name").val() === "") {
@@ -50,6 +43,7 @@ $("#add-train-button").on("click", function(event) {
         alert("Please enter the minutes in a numerical value");
     }
 
+    // Once the form is validated the data can be pushed to Firebase
     else {
         database.ref().push({
             trainName: trainName,
@@ -57,11 +51,10 @@ $("#add-train-button").on("click", function(event) {
             trainTime: trainTime,
             trainFrequency: trainFrequency
         });
-
     };
-    
 });
 
+// Update the table with each new train input
 database.ref().on("child_added", function(snapshot) {
     var sv = snapshot.val();
     var newRow = $("<tr>")

@@ -9,6 +9,7 @@
   };
   firebase.initializeApp(config);
 var database = firebase.database();
+var timeFormat = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
 $("#add-train-button").on("click", function(event) {
     event.preventDefault();
@@ -16,15 +17,25 @@ $("#add-train-button").on("click", function(event) {
     trainDestination = $("#train-destination").val().trim();
     trainTime = $("#train-time").val().trim();
     trainFrequency = $("#train-frequency").val().trim();
+    
 
-    database.ref().push({
-        trainName: trainName,
-        trainDestination: trainDestination,
-        trainTime: trainTime,
-        trainFrequency: trainFrequency
-    });
+    if (!timeFormat.test(trainTime)) {
+        alert("Please input the time in HH:MM format (military time)");
+    }
+    else if (!typeof trainFrequency === "number") {
+        alert("Please enter the minutes in a numerical value");
+    }
+    else {
+        database.ref().push({
+            trainName: trainName,
+            trainDestination: trainDestination,
+            trainTime: trainTime,
+            trainFrequency: trainFrequency
+        });
 
-    console.log(trainName, trainDestination, trainTime, trainFrequency);
+        console.log(trainName, trainDestination, trainTime, trainFrequency);
+    };
+    
 });
 
 database.ref().on("child_added", function(snapshot) {
@@ -35,6 +46,7 @@ database.ref().on("child_added", function(snapshot) {
     var destinationTD = $("<td>").text(sv.trainDestination);
     var frequencyTD = $("<td>").text(sv.trainFrequency);
 
+    // Convert time so a train doesn't start at the time of entry
     var firstTrainTimeConverted = moment(sv.trainTime, "HH:mm").subtract(1, "years");
     var diffTime = moment().diff(moment(firstTrainTimeConverted), "minutes");
     var timePassed = diffTime % sv.trainFrequency;

@@ -4,6 +4,10 @@ A page where users can input new trains to update a schedule table
 
 Enter in the train name, destination, time of the first arrival in military HH:mm format, and the frequency in minutes. Click submit to add it to the table.
 
+Deployed:
+
+https://sdreyes.github.io/Train-Scheduler/
+
 Requirements:
 
 * Make sure that your app suits this basic spec:

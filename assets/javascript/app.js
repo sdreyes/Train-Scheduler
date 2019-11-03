@@ -16,7 +16,7 @@ $("#add-train-button").on("click", function (event) {
 
   // Regular expression for military time
   var timeFormat = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-  
+
   // Capture the values in the input fields
   trainName = $("#train-name").val().trim();
   trainDestination = $("#train-destination").val().trim();
@@ -54,45 +54,42 @@ $("#add-train-button").on("click", function (event) {
   };
 });
 
-function update() {
-  $("tbody").empty();
-  database.ref().on("child_added", function (snapshot) {
-    var sv = snapshot.val();
-    var newRow = $("<tr>")
-  
-    var nameTD = $("<td>").text(sv.trainName);
-    var destinationTD = $("<td>").text(sv.trainDestination);
-    var frequencyTD = $("<td>").text(sv.trainFrequency);
-  
-    // Convert time so a train doesn't start at the time of entry
-    var firstTrainTimeConverted = moment(sv.trainTime, "HH:mm").subtract(1, "years");
-    var diffTime = moment().diff(moment(firstTrainTimeConverted), "minutes");
-    var timePassed = diffTime % sv.trainFrequency;
-    var minutesTilTrain = sv.trainFrequency - timePassed;
-    var nextTrain = moment().add(minutesTilTrain, "minutes");
-  
-    var nextArrivalTD = $("<td>").text(moment(nextTrain).format("LT"));
-    var minutesAwayTD = $("<td>").text(minutesTilTrain);
-  
-    // Create a button to delete each train, storing the Firebase key as a data attribute
-    var x = $("<button>");
-    x.attr("data-key", snapshot.key);
-    x.addClass("btn btn-sm btn-dark mt-2");
-    x.text("x");
-  
-    x.on("click", function() {
-      // Capture the Firebase key data attribute and use it to remove it from the Firebase database
-      var key = $(this).attr("data-key");
-      database.ref().child(key).remove();
-      update();
-    })
-  
-    newRow.append(nameTD, destinationTD, frequencyTD, nextArrivalTD, minutesAwayTD, x);
-    $("tbody").append(newRow);
-  
-  }, function (errorObject) {
-    console.log("Errors handled: " + errorObject.code);
-  });
-}
+$("tbody").on("click", ".delete-btn", function () {
+  // Capture the Firebase key data attribute and use it to remove it from the Firebase database
+  var key = $(this).attr("data-key");
+  database.ref().child(key).remove();
+  $(this).parents("tr").remove();
+})
 
-update();
+database.ref().on("child_added", function (snapshot) {
+  var sv = snapshot.val();
+  var newRow = $("<tr>")
+
+  var nameTD = $("<td>").text(sv.trainName);
+  var destinationTD = $("<td>").text(sv.trainDestination);
+  var frequencyTD = $("<td>").text(sv.trainFrequency);
+
+  // Convert time so a train doesn't start at the time of entry
+  var firstTrainTimeConverted = moment(sv.trainTime, "HH:mm").subtract(1, "years");
+  var diffTime = moment().diff(moment(firstTrainTimeConverted), "minutes");
+  var timePassed = diffTime % sv.trainFrequency;
+  var minutesTilTrain = sv.trainFrequency - timePassed;
+  var nextTrain = moment().add(minutesTilTrain, "minutes");
+
+  var nextArrivalTD = $("<td>").text(moment(nextTrain).format("LT"));
+  var minutesAwayTD = $("<td>").text(minutesTilTrain);
+
+  // Create a button to delete each train, storing the Firebase key as a data attribute
+  var x = $("<button>");
+  x.attr("data-key", snapshot.key);
+  x.addClass("btn btn-sm btn-danger mt-2 delete-btn");
+  x.text("X");
+
+  var deleteTD = $("<td class='text-center'>").append(x);
+
+  newRow.append(deleteTD, nameTD, destinationTD, frequencyTD, nextArrivalTD, minutesAwayTD);
+  $("tbody").append(newRow);
+
+}, function (errorObject) {
+  console.log("Errors handled: " + errorObject.code);
+});
